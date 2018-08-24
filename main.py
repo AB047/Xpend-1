@@ -2,12 +2,11 @@
 TO DO:
 
 main.py
-    append text_message.py to main.py and delete text_message.py
-    fix clickp() function in OCR.py to run the picture window like a browser to slect image
-    give a more aesthetic look to the windows
+    fix random window popping when program is first run
+    fix file_path not defined issue from clickp() 
+    give a title and more aesthetic look to the windows
     display appropriate error or affirmative messages
     Add a button to show the total amount spent in  the entire month
-    correct the function naming in several instances, for ex: clickp has a collision with one of the OCR packages
 
 """
 
@@ -20,7 +19,7 @@ from tkinter import *
 import tkinter as tk
 from tkinter.filedialog import askopenfilename
 from tkinter import ttk
-global Xpend
+global Xpnse
 
 ##Message Logic ##########################################################################
 
@@ -59,13 +58,10 @@ def mess(self):
 ########################## OCR Text recognition ####################################
 
 def textext(self):
-  # Open the file with read only permit
   f = open('prctxt.txt', "r")
   # use readlines to read all lines in the file
-  # The variable "lines" is a list containing all lines in the file
   lines = f.readlines()
-  # close the file after reading the lines.
-
+  f.close()
   amt1=''
   for i in lines:
      i = i.lower()
@@ -76,9 +72,8 @@ def textext(self):
                amt1 = amt1 + j
   a=(amt1.split())
   print(a[1])
-  Xpnse+=a[1]
-  f.close()
-
+  Xpnse = Xpnse + a[1]
+  
 
 ############## End of textext ########################################################
 
@@ -91,13 +86,15 @@ class hello:
         self.root.title("Finance")
         self.root = tk.Tk("Xpend")
         self.root.title("")
-        #self.root.iconbitmap(self, default="images\icon.ico")
+        #self.root.iconbitmap(self, default="images\icon.ico") # Needs icon.ico file from folder "images"
         self.topFrame=Frame(self.root)
         self.topFrame.pack()
         self.bottomFrame=Frame(self.root)
         self.bottomFrame.pack(side="bottom")
         self.mainp()
         self.root.mainloop()
+
+
     def but1fun(self):
          mamt = int(self.entryamt.get())
          mtag = self.entrytag.get()
@@ -107,9 +104,11 @@ class hello:
          self.label2 = Label(self.manualw, text="Transaction is successfully saved.")
          self.label2.grid(row=6, columnspan=3)
          self.file1.close()
+
+
     def manualp(self):
         self.manualw = Tk()
-        #self.manualw.iconbitmap(self, default="images\icon.ico")
+        #self.manualw.iconbitmap(self, default="images\icon.ico") # Needs the icon file from the folder "images" to work 
         label1 = Label(self.manualw, text="Enter the amount").grid(row=0)
         self.entryamt = Entry(self.manualw)
         self.entryamt.grid(row=0, column=1)
@@ -122,33 +121,43 @@ class hello:
         # self.bclear=Button(self.manualw,text="Clear contents",command=self.file1.truncate(0))
         # self.bclear.grid(row=5,columnspan=3)
         self.manualw.mainloop()
+
+
     def clickp(self):
         self.clickw = Tk()
         pass
-        self.clickw.mainloop()
+        #self.clickw.mainloop()
         #self.clickw = Tk()
         file_path =str(askopenfilename())
-        amt=final_image(str(file_path))
-        label=Label(self.clickw,text=amt).grid(row=0)
-        #self.clickw.mainloop()
+        final_image(self,file_path)
+        textext()
+        #amt=final_image(str(file_path))
+        label=Label(self.clickw,text="Amount successfully added").grid(row=0)
+        self.clickw.mainloop()
+
+
     def msgp(self):
         #this functions will be improvied in a later build
         self.msgp = Tk()
         pass
         self.msgp.mainloop()
+
+
     def mainp(self):
         self.manualb = Button(self.root, text="Enter transaction manually", command=self.manualp)
         #this is the first window which displays as soon as the program runs
-        self.manualb = ttk.Button(self.root, text="Enter transaction manually", command=self.manualp)
+        self.manualb = Button(self.root, text="Enter transaction manually",command=self.manualp)
         self.manualb.pack()
         self.clickb = Button(self.root, text="Enter transaction by picture", command=self.clickp)
-        self.clickb = ttk.Button(self.root, text="Enter transaction by picture", command=self.clickp)
+        self.clickb = Button(self.root, text="Enter transaction by picture", command=self.clickp)
         self.clickb.pack()
         self.msgb = Button(self.root, text="Enter transaction from messages", command=self.msgp)
         self.msgb.pack()
         #the following comments are commented out as it belongs to message reading which will be added on in a later build
         #self.msgb = Button(self.root, text="Enter transaction from messages", command=self.msgp)
         #self.msgb.pack()
+
+        
 if __name__ == '__main__':
     hello()
 
